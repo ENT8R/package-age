@@ -1,0 +1,42 @@
+{
+  "name": "package-age",
+  "version": "0.1.0",
+  "description": "A CLI for detecting old dependencies used in your project",
+  "main": "index.js",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^2.15.1",
+    "read-pkg": "^3.0.0",
+    "semver": "^5.5.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "mocha": "^5.1.1"
+  },
+  "scripts": {
+    "lint": "eslint **.js",
+    "mocha": "mocha",
+    "test": "npm run lint && npm run mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ENT8R/package-age.git"
+  },
+  "keywords": [
+    "package",
+    "npm",
+    "age",
+    "old",
+    "unsupported",
+    "dependencies",
+    "dependency",
+    "cli"
+  ],
+  "author": "ENT8R",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ENT8R/package-age/issues"
+  },
+  "homepage": "https://github.com/ENT8R/package-age#readme"
+}
