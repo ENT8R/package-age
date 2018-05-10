@@ -8,26 +8,9 @@
 $ npm install package-age --global
 ```
 
-
 ## Usage
 
-```
-❯ package-age --help
-
-    Usage: package-age [options]
-
-    Options:
-
-      -v, --version           output the version number
-      -f, --file [optional]   path to the package.json
-      -y, --year [optional]   after how much years a package should be considered old
-      -m, --month [optional]  after how much months a package should be considered old
-      -a, --all               parameter to get all kinds of dependencies
-      -d, --dev               parameter to get the devDependencies
-      -p, --peer              parameter to get the peerDependencies
-      -b, --bundled           parameter to get the bundledDependencies
-      -h, --help              output usage information
-```
+<img src="carbon.png">
 
 ## License
 

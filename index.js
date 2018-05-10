@@ -16,6 +16,7 @@ const config = {
 
 commander
   .version(config.version, '-v, --version')
+  .description('A CLI for detecting old dependencies used in your project')
   .option('-f, --file [optional]', 'path to the package.json')
 
   .option('-y, --year [optional]', 'after how much years a package should be considered old')
