@@ -1,6 +1,6 @@
 {
   "name": "package-age",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A CLI for detecting old dependencies used in your project",
   "main": "index.js",
   "dependencies": {
@@ -18,6 +18,9 @@
     "lint": "eslint **.js",
     "mocha": "mocha",
     "test": "npm run lint && npm run mocha"
+  },
+  "bin": {
+    "package-age": "./index.js"
   },
   "repository": {
     "type": "git",
