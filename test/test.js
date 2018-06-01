@@ -14,9 +14,9 @@ const packageAge = require('../index.js');
 
 describe('Versions', () => {
   describe('#compare()', () => {
-    it('should return the version in red and bold', () => {
+    it('should return the version in red and bold and the new version in green and bold', () => {
       const result = packageAge.Versions.compare('1.2.0', '1.3.0');
-      assert.equal(result, chalk.bgRed.bold('1.2.0'));
+      assert.equal(result, `${chalk.bgRed.bold('1.2.0')} => ${chalk.bgGreen.bold('1.3.0')}`);
     });
     it('should return the version in green and bold', () => {
       const result = packageAge.Versions.compare('1.3.0', '1.3.0');
