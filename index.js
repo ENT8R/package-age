@@ -78,16 +78,15 @@ const Dependencies = (() => {
   }
 
   function info(name, version, type) {
-    request(`${config.registry}${name}`)
-      .then((body) => {
-        const v = Versions.compare(version, body['dist-tags'].latest);
-        const d = Dates.compare(body.time[version]);
-        if (type === Types.NORMAL) {
-          console.log(name, v, d);// eslint-disable-line no-console
-        } else {
-          console.log(name, Types.short[type], v, d);// eslint-disable-line no-console
-        }
-      });
+    request(`${config.registry}${name}`).then((body) => {
+      const v = Versions.compare(version, body['dist-tags'].latest);
+      const d = Dates.compare(body.time[version]);
+      if (type === Types.NORMAL) {
+        console.log(name, v, d);// eslint-disable-line no-console
+      } else {
+        console.log(name, Types.short[type], v, d);// eslint-disable-line no-console
+      }
+    });
   }
 
   return me;
@@ -99,7 +98,7 @@ const Versions = (() => {
   me.compare = function(v, l) {
     const compare = semver.compare(v, l);
     if (compare === -1) {
-      return chalk.bgRed.bold(v);
+      return `${chalk.bgRed.bold(v)} => ${chalk.bgGreen.bold(l)}`;
     } else {
       return chalk.bgGreen.bold(v);
     }
