@@ -1,6 +1,6 @@
 {
   "name": "package-age",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A CLI for detecting old dependencies used in your project",
   "main": "index.js",
   "dependencies": {
