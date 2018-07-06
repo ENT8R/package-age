@@ -68,24 +68,33 @@ const Dependencies = (() => {
     });
   };
 
-  function process(dependencies, type) {
+  async function process(dependencies, type) {
+    const packages = [];
     for (const dependency in dependencies) {
       if (dependencies.hasOwnProperty(dependency)) {
         const version = dependencies[dependency];
-        info(dependency, Versions.clean(version), type);
+        const output = await info(dependency, Versions.clean(version), type);
+        packages.push(output);
       }
+    }
+    if (packages.length > 0) {
+      console.log(packages.join('\n'), '\n'); // eslint-disable-line no-console
     }
   }
 
   function info(name, version, type) {
-    request(`${config.registry}${name}`).then((body) => {
-      const v = Versions.compare(version, body['dist-tags'].latest);
-      const d = Dates.compare(body.time[version]);
-      if (type === Types.NORMAL) {
-        console.log(name, v, d);// eslint-disable-line no-console
-      } else {
-        console.log(name, Types.short[type], v, d);// eslint-disable-line no-console
-      }
+    return new Promise((resolve, reject) => {
+      request(`${config.registry}${name}`).then((body) => {
+        const v = Versions.compare(version, body['dist-tags'].latest);
+        const d = Dates.compare(body.time[version]);
+        if (type === Types.NORMAL) {
+          resolve(`${name} ${v} ${d}`);
+        } else {
+          resolve(`${name} ${Types.short[type]} ${v} ${d}`);
+        }
+      }).catch((error) => {
+        reject(error);
+      });
     });
   }
 

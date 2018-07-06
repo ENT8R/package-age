@@ -5,13 +5,13 @@
   "main": "index.js",
   "dependencies": {
     "chalk": "^2.4.1",
-    "commander": "^2.15.1",
-    "read-pkg": "^3.0.0",
+    "commander": "^2.16.0",
+    "read-pkg": "^4.0.1",
     "semver": "^5.5.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "eslint": "^4.19.1",
+    "eslint": "^5.0.1",
     "mocha": "^5.2.0"
   },
   "scripts": {
