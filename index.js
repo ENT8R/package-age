@@ -8,7 +8,7 @@ const readPkg = require('read-pkg');
 const semver = require('semver');
 
 const config = {
-  version: '0.1.4',
+  version: '0.2.0',
   registry: 'https://registry.npmjs.org/',
   cli: true,
   oldAfter: {
