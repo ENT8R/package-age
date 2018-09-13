@@ -5,13 +5,14 @@
   "main": "index.js",
   "dependencies": {
     "chalk": "^2.4.1",
-    "commander": "^2.16.0",
+    "cli-table3": "^0.5.1",
+    "commander": "^2.18.0",
     "read-pkg": "^4.0.1",
-    "semver": "^5.5.0"
+    "semver": "^5.5.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "eslint": "^5.0.1",
+    "eslint": "^5.5.0",
     "mocha": "^5.2.0"
   },
   "scripts": {
@@ -41,5 +42,5 @@
   "bugs": {
     "url": "https://github.com/ENT8R/package-age/issues"
   },
-  "homepage": "https://github.com/ENT8R/package-age#readme"
+  "homepage": "https://github.com/ENT8R/package-age"
 }

@@ -38,6 +38,17 @@ describe('Versions', () => {
       assert.equal(result, '1.2.0');
     });
   });
+
+  describe('#valid()', () => {
+    it('should return false for the version "latest"', () => {
+      const result = packageAge.Versions.valid('latest');
+      assert.equal(result, false);
+    });
+    it('should return true for the version "1.2.0"', () => {
+      const result = packageAge.Versions.valid('1.2.0');
+      assert.equal(result, true);
+    });
+  });
 });
 
 describe('Dates', () => {
@@ -46,13 +57,13 @@ describe('Dates', () => {
       const x = new Date();
       x.setFullYear(x.getFullYear() - 3);
       const result = packageAge.Dates.compare(x);
-      assert.equal(result, chalk.bgRed.bold(x));
+      assert.equal(result, chalk.bgRed.bold(x.toLocaleString()));
     });
     it('should return the date in green and bold', () => {
       const x = new Date();
       x.setFullYear(x.getFullYear() - 1);
       const result = packageAge.Dates.compare(x);
-      assert.equal(result, chalk.bgGreen.bold(x));
+      assert.equal(result, chalk.bgGreen.bold(x.toLocaleString()));
     });
   });
 });

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const chalk = require('chalk');
+const Table = require('cli-table3');
 const commander = require('commander');
 const https = require('https');
 const readPkg = require('read-pkg');
@@ -16,6 +17,15 @@ const config = {
   }
 };
 
+const table = new Table({
+  head: [
+    chalk.keyword('orange').underline('Name'),
+    chalk.keyword('orange').underline('Type'),
+    chalk.keyword('orange').underline('Version'),
+    chalk.keyword('orange').underline('Last Publish')
+  ]
+});
+
 commander
   .version(config.version, '-v, --version')
   .description('A CLI for detecting old dependencies used in your project')
@@ -28,7 +38,6 @@ commander
   .option('-d, --dev', 'parameter to get the devDependencies')
   .option('-p, --peer', 'parameter to get the peerDependencies')
   .option('-b, --bundled', 'parameter to get the bundledDependencies')
-  // .option('-o, --optional', 'parameter to get the optionalDependencies')
   .parse(process.argv);
 
 const Dependencies = (() => {
@@ -39,58 +48,95 @@ const Dependencies = (() => {
     DEV: 'devDependencies',
     PEER: 'peerDependencies',
     BUNDLED: 'bundledDependencies',
-    // OPTIONAL: 'optionalDependencies',
     short: {
-      devDependencies: chalk.blue.bold('(dev)'),
-      peerDependencies: chalk.magenta.bold('(peer)'),
-      bundledDependencies: chalk.cyan.bold('(bundled)'),
-      // optionalDependencies: chalk.yellow.bold('(optional)')
+      devDependencies: chalk.blue.bold('dev'),
+      peerDependencies: chalk.magenta.bold('peer'),
+      bundledDependencies: chalk.cyan.bold('bundled'),
     }
   };
 
-  me.get = function(path) {
-    readPkg(path).then(pkg => {
-      // always read the normal dependencies
-      process(pkg.dependencies, Types.NORMAL);
+  me.get = function(path, options) {
+    return new Promise((resolve, reject) => {
+      readPkg(path).then(async (pkg) => {
+        const result = {};
+        // always read the normal dependencies
+        result.dependencies = await p(pkg.dependencies, Types.NORMAL);
 
-      if (commander.dev || commander.all) {
-        process(pkg.devDependencies, Types.DEV);
-      }
-      if (commander.peer || commander.all) {
-        process(pkg.peerDependencies, Types.PEER);
-      }
-      if (commander.bundled || commander.all) {
-        process(pkg.bundledDependencies, Types.BUNDLED);
-      }
-      /* if (commander.optional || commander.all) {
-        process(pkg.optionalDependencies, Types.OPTIONAL);
-      }*/
+        if (commander.dev || commander.all || options.dev || options.all) {
+          result.devDependencies = await p(pkg.devDependencies, Types.DEV);
+        }
+        if (commander.peer || commander.all || options.peer || options.all) {
+          result.peerDependencies = await p(pkg.peerDependencies, Types.PEER);
+        }
+        if (commander.bundled || commander.all || options.bundled || options.all) {
+          result.bundledDependencies = await p(pkg.bundledDependencies, Types.BUNDLED);
+        }
+        if (require.main === module) {
+          console.log(table.toString()); // eslint-disable-line no-console
+        } else {
+          resolve(result);
+        }
+      }).catch((e) => {
+        reject(e);
+      });
     });
   };
 
-  async function process(dependencies, type) {
+  async function p(dependencies, type) {
     const packages = [];
     for (const dependency in dependencies) {
       if (dependencies.hasOwnProperty(dependency)) {
-        const version = dependencies[dependency];
-        const output = await info(dependency, Versions.clean(version), type);
-        packages.push(output);
+        try {
+          const version = dependencies[dependency];
+          const output = await info(dependency, Versions.clean(version), type);
+          packages.push(output);
+        } catch (e) {
+          /* eslint-disable no-console */
+          console.log(chalk.bgRed.bold(
+            'Something went wrong during requesting the information from the server.\nAre you sure you are connected to the internet?'
+          ));
+          /* eslint-enable no-console */
+          process.exit(1);
+        }
       }
     }
-    if (packages.length > 0) {
-      console.log(packages.join('\n'), '\n'); // eslint-disable-line no-console
-    }
+    return packages;
   }
 
   function info(name, version, type) {
     return new Promise((resolve, reject) => {
       request(`${config.registry}${name}`).then((body) => {
+        if (Versions.valid(version) === false) {
+          const text = chalk.bgRed.bold(`supplied invalid version: '${version}'`);
+          const res = {
+            name,
+            type: null,
+            version: text,
+            date: null
+          };
+          table.push(Object.values(res));
+          resolve(res);
+        }
         const v = Versions.compare(version, body['dist-tags'].latest);
         const d = Dates.compare(body.time[version]);
         if (type === Types.NORMAL) {
-          resolve(`${name} ${v} ${d}`);
+          const res = {
+            name,
+            type: null,
+            version: v,
+            date: d
+          };
+          table.push(Object.values(res));
+          resolve(res);
         } else {
-          resolve(`${name} ${Types.short[type]} ${v} ${d}`);
+          const res = {
+            name,
+            type: Types.short[type],
+            version: v,
+            date: d
+          };
+          table.push(Object.values(res));
+          resolve(res);
         }
       }).catch((error) => {
         reject(error);
@@ -121,6 +167,10 @@ const Versions = (() => {
     return v;
   };
 
+  me.valid = function(v) {
+    return semver.valid(v) !== null;
+  };
+
   return me;
 })();
 
@@ -132,6 +182,8 @@ const Dates = (() => {
     x.setFullYear(x.getFullYear() - config.oldAfter.years);
     x.setMonth(x.getMonth() - config.oldAfter.months);
     const y = new Date(d);
+    // TODO: add the locale as a parameter
+    d = new Date(d).toLocaleString();
 
     if (x <= y) {
       return chalk.bgGreen.bold(d);
@@ -155,7 +207,6 @@ const Dates = (() => {
 function request(url) {
   return new Promise((resolve, reject) => {
     const request = https.get(url, (response) => {
-      // handle http errors
       if (response.statusCode < 200 || response.statusCode > 299) {
         reject(new Error(`Failed to load page, status code: ${response.statusCode}`));
       }
@@ -170,9 +221,8 @@ function request(url) {
 if (require.main === module) {
   Dependencies.get(commander.file || 'package.json');
 } else {
-  // TODO: add also a real API (not only a CLI)
   config.cli = false;
-
+  exports.Dependencies = Dependencies;
   exports.Versions = Versions;
   exports.Dates = Dates;
 }
