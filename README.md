@@ -11,7 +11,7 @@ $ npm install package-age --global
 
 ## Usage
 
-<img src="carbon.png">
+<img src="assets/carbon.png">
 
 ## License
 

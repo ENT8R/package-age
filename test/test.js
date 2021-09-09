@@ -1,15 +1,16 @@
 /* globals describe */
 /* globals it */
 
-const { expect } = require('chai');
-const chalk = require('chalk');
+import { expect } from 'chai';
+import chalk from 'chalk';
+import { readPackageSync } from 'read-pkg';
 
-const dates = require('../lib/dates.js');
-const information = require('../lib/information.js');
-const request = require('../lib/request.js');
-const versions = require('../lib/versions.js');
+import * as dates from '../lib/dates.js';
+import information from '../lib/information.js';
+import request from '../lib/request.js';
+import * as versions from '../lib/versions.js';
 
-const version = require('../package.json').version;
+const version = readPackageSync().version;
 const config = {
   registry: 'https://registry.npmjs.org'
 };
