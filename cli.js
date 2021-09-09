@@ -36,6 +36,11 @@ program
   .option('-d, --dev', 'parameter to get the devDependencies', false)
   .option('-p, --peer', 'parameter to get the peerDependencies', false)
   .option('-b, --bundled', 'parameter to get the bundledDependencies', false)
+
+  // The following two options, if present, are automatically detected by chalk
+  // For more information see: https://github.com/chalk/supports-color/blob/v7.1.0/index.js#L8-L19
+  .option('--color', 'force colored output')
+  .option('--no-color', 'force non-colored output')
   .parse(process.argv);
 
 async function cli() {
