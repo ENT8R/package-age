@@ -7,12 +7,12 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        node-version: [ 14, 16, 18 ]
+        node-version: [ 16, 18 ]
 
     steps:
     - uses: actions/checkout@v3
@@ -24,3 +24,20 @@ jobs:
     - run: npm ci
     - run: npm test
     - run: npm run coverage
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: node-${{ matrix.node-version }}
+        parallel: true
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
