@@ -16,10 +16,10 @@ const SHORT = {
 
 const table = new Table({
   head: [
-    chalk.keyword('orange').underline('Name'),
-    chalk.keyword('orange').underline('Type'),
-    chalk.keyword('orange').underline('Version'),
-    chalk.keyword('orange').underline('Last Publish')
+    chalk.rgb(255, 165, 0).underline('Name'),
+    chalk.rgb(255, 165, 0).underline('Type'),
+    chalk.rgb(255, 165, 0).underline('Version'),
+    chalk.rgb(255, 165, 0).underline('Last Publish')
   ]
 });
 
