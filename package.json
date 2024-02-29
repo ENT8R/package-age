@@ -1,6 +1,6 @@
 {
   "name": "sg-package-age",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "A CLI for detecting old dependencies used in your project",
   "type": "module",
   "exports": "./index.js",
