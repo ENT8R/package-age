@@ -1,6 +1,6 @@
 {
   "name": "sg-package-age",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "A CLI for detecting old dependencies used in your project",
   "type": "module",
   "exports": "./index.js",
@@ -47,8 +47,4 @@
   ],
   "author": "ENT8R",
   "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/ENT8R/package-age/issues"
-  },
-  "homepage": "https://github.com/ENT8R/package-age"
 }
