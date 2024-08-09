@@ -112,7 +112,7 @@ describe('request', function() {
     );
   });
 
-  it('should throw an error if no URL has been specified', () => {
+  it('should throw an error if a wrong URL has been specified', () => {
     return request('https://npmjs.org/registry/package-age').then(() =>
       Promise.reject(new Error('Expected method to reject.'))
     ).catch(error =>
