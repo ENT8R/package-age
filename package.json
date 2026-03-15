@@ -19,20 +19,20 @@
     "coverage": "c8 report --reporter=text-lcov > coverage/lcov.info"
   },
   "dependencies": {
-    "chalk": "^5.3.0",
+    "chalk": "^5.6.2",
     "cli-table3": "^0.6.5",
-    "commander": "^12.1.0",
-    "read-pkg": "^9.0.1",
-    "semver": "^7.6.3"
+    "commander": "^14.0.3",
+    "read-pkg": "^10.1.0",
+    "semver": "^7.7.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "c8": "^10.1.2",
-    "chai": "^5.1.1",
+    "c8": "^11.0.0",
+    "chai": "^6.2.2",
     "eslint": "^10.0.3",
     "globals": "^17.4.0",
-    "mocha": "^10.7.3"
+    "mocha": "^11.7.5"
   },
   "repository": {
     "type": "git",
